@@ -52,7 +52,30 @@ function showPage(p) {
   if (p === 'cart')     renderCart();
   if (p === 'checkout') renderCheckout();
   if (p === 'admin')    renderAdmin();
+  else resetAdminPage();
   window.scrollTo(0, 0);
+}
+
+function resetAdminPage() {
+  document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(x => x.classList.remove('active'));
+  const productsBtn = document.querySelector('.tab-btn[onclick*="products"]');
+  const productsTab = document.getElementById('tab-products');
+  if (productsBtn) productsBtn.classList.add('active');
+  if (productsTab) productsTab.classList.add('active');
+
+  const nameInput = document.getElementById('a-name');
+  const priceInput = document.getElementById('a-price');
+  const descInput = document.getElementById('a-desc');
+  if (nameInput) nameInput.value = '';
+  if (priceInput) priceInput.value = '';
+  if (descInput) descInput.value = '';
+
+  const preview = document.getElementById('img-preview');
+  if (preview) preview.style.display = 'none';
+  pendingImage = null;
+  const uploadText = document.querySelector('#upload-area p');
+  if (uploadText) uploadText.textContent = 'Click to upload product image';
 }
 
 // ── SHOP ──
@@ -239,7 +262,8 @@ function placeOrder() {
   saveData('scentoria_cart', cart);
   updateCartCount();
 
-  document.getElementById('success-ref').textContent = ref;
+  const successEl = document.getElementById('success-ref');
+  if (successEl) successEl.textContent = ref;
   showPage('success');
 }
 

@@ -518,19 +518,6 @@ nav{
   margin-bottom:1.5rem;
 }
 
-.order-ref{
-  background:var(--warm-white);
-  border:1px solid var(--border);
-  padding:1rem 1.5rem;
-  border-radius:4px;
-  margin:1rem auto;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.4rem;
-  color:var(--gold-dark);
-  letter-spacing:3px;
-  display:inline-block;
-}
-
 /* ── ADMIN ── */
 .admin-container{
   max-width:1100px;

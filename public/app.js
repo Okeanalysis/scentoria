@@ -42,7 +42,7 @@ function loadAll() {
 
 function resetAdminPortal() {
   products = [];
-  delivery = [];
+  delivery = JSON.parse(JSON.stringify(DEFAULT_DELIVERY));
   orders = [];
   cart = [];
   pendingImage = null;
@@ -54,9 +54,30 @@ function resetAdminPortal() {
 
   updateCartCount();
   renderShop();
-  renderAdmin();
-  resetAdminPage();
-  showToast('Admin portal reset to zero.');
+
+  if (document.getElementById('page-admin').classList.contains('active')) {
+    renderAdmin();
+    clearAdminForm();
+  }
+  if (document.getElementById('page-checkout').classList.contains('active')) {
+    renderCheckout();
+  }
+
+  showToast('Admin portal reset to default state.');
+}
+
+function clearAdminForm() {
+  const nameInput = document.getElementById('a-name');
+  const priceInput = document.getElementById('a-price');
+  const descInput = document.getElementById('a-desc');
+  if (nameInput) nameInput.value = '';
+  if (priceInput) priceInput.value = '';
+  if (descInput) descInput.value = '';
+
+  const preview = document.getElementById('img-preview');
+  if (preview) preview.style.display = 'none';
+  const uploadText = document.querySelector('#upload-area p');
+  if (uploadText) uploadText.textContent = 'Click to upload product image';
 }
 
 // ── NAVIGATION ──

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scentoria — Luxury Perfumes</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SCENTORIA</div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('shop')">Shop</button>
+    <button class="nav-btn" onclick="showPage('cart')">Cart <span class="cart-badge" id="cart-count">0</span></button>
+    <button class="nav-btn" onclick="showPage('admin')">Admin</button>
+  </div>
+</nav>
+
+<!-- SHOP PAGE -->
+<div class="page active" id="page-shop">
+  <div class="hero">
+    <h1>The Art of Fragrance</h1>
+    <div class="hero-line"></div>
+    <p>LUXURY PERFUMES · CURATED COLLECTION</p>
+  </div>
+  <div class="section">
+    <h2 class="section-title">Our Collection</h2>
+    <p class="section-sub">SELECT A FRAGRANCE TO BEGIN YOUR JOURNEY</p>
+    <div class="products-grid" id="products-grid">
+      <div class="empty-state">
+        <i class="fas fa-spray-can"></i>
+        <p>No perfumes yet.<br>Visit the admin panel to add your collection.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="page-cart">
+  <div class="cart-container">
+    <h2 class="section-title" style="text-align:left;margin-bottom:2rem">Your Selection</h2>
+    <div id="cart-items-list"></div>
+    <div id="cart-empty" style="display:none">
+      <i class="fas fa-shopping-bag" style="font-size:3rem;opacity:.2;display:block;margin-bottom:1rem"></i>
+      <p>Your cart is empty</p>
+      <button class="nav-btn" style="margin-top:1rem" onclick="showPage('shop')">Continue Shopping</button>
+    </div>
+    <div id="cart-summary-block"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div class="page" id="page-checkout">
+  <div class="checkout-container">
+    <h2 class="section-title" style="text-align:left;margin-bottom:2rem">Complete Your Order</h2>
+    <div class="form-section-title">Your Details</div>
+    <div class="form-group"><label>Full Name</label><input id="c-name" type="text" placeholder="Your name"></div>
+    <div class="form-group"><label>Email Address</label><input id="c-email" type="email" placeholder="you@email.com"></div>
+    <div class="form-group"><label>Phone Number</label><input id="c-phone" type="tel" placeholder="0801 234 5678"></div>
+    <div class="form-section-title">Delivery Details</div>
+    <div class="form-group">
+      <label>Delivery Location</label>
+      <select id="c-location" onchange="updateDeliveryFee()">
+        <option value="">— Select location —</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Full Address</label><textarea id="c-address" rows="3" placeholder="Street, area, landmark..."></textarea></div>
+    <div class="payment-box">
+      <h3>Payment via OPay</h3>
+      <p>Transfer your order total to:</p>
+      <div class="opay-number">9097029635</div>
+      <p style="color:var(--gold-light);font-size:.85rem;margin-top:.5rem">Account Name: <strong>Scentoria</strong></p>
+      <p class="opay-note">Use your order reference as transfer narration. After transferring, click "Place Order" — we confirm once payment is verified.</p>
+    </div>
+    <div id="order-summary-checkout"></div>
+    <button class="place-order-btn" onclick="placeOrder()">Place Order →</button>
+  </div>
+</div>
+
+<!-- ORDER SUCCESS -->
+<div class="page" id="page-success">
+  <div class="success-page">
+    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+    <h2>Order Placed!</h2>
+    <p>Thank you for your order. Please complete your OPay transfer to <strong style="color:var(--gold-dark)">9097029635</strong>. Use your reference number as transfer narration. Once confirmed, your fragrance will be on its way.</p>
+    <div class="order-ref" id="success-ref">—</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:1.5rem">Use this reference as your OPay transfer narration</p>
+    <button class="nav-btn" onclick="showPage('shop')">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div class="admin-container">
+    <div class="admin-header">
+      <h2>Admin Panel</h2>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:1px">SCENTORIA MANAGEMENT</span>
+    </div>
+
+    <div class="stat-cards" id="admin-stats"></div>
+
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="switchTab(event,'products')">Products</button>
+      <button class="tab-btn" onclick="switchTab(event,'delivery')">Delivery Zones</button>
+      <button class="tab-btn" onclick="switchTab(event,'orders')">Orders</button>
+    </div>
+
+    <!-- PRODUCTS TAB -->
+    <div class="admin-section active" id="tab-products">
+      <div class="add-product-form">
+        <h3 class="form-section-title" style="margin-top:0">Add New Perfume</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Perfume Name</label><input id="a-name" type="text" placeholder="e.g. Black Orchid"></div>
+          <div class="form-group"><label>Price (₦)</label><input id="a-price" type="number" placeholder="15000"></div>
+        </div>
+        <div class="form-group"><label>Description</label><input id="a-desc" type="text" placeholder="Brief scent description"></div>
+        <div class="form-group">
+          <label>Product Image</label>
+          <div class="img-upload-area" id="upload-area">
+            <input type="file" accept="image/*" onchange="handleImageUpload(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click to upload product image</p>
+            <p style="font-size:11px;margin-top:4px">JPG, PNG, WEBP supported</p>
+          </div>
+          <img id="img-preview" class="img-preview" style="display:none">
+        </div>
+        <button class="save-btn" onclick="addProduct()">Add to Collection</button>
+      </div>
+
+      <h3 class="form-section-title">Current Collection</h3>
+      <div style="overflow-x:auto">
+        <table class="admin-table">
+          <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Description</th><th>Action</th></tr></thead>
+          <tbody id="products-admin-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DELIVERY TAB -->
+    <div class="admin-section" id="tab-delivery">
+      <h3 class="form-section-title" style="margin-top:0">Delivery Zones & Fees</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1rem">Set delivery fees for each location. Customers select from these during checkout.</p>
+      <div style="overflow-x:auto">
+        <table class="delivery-table">
+          <thead><tr><th>Location / State</th><th>Delivery Fee (₦)</th><th>Action</th></tr></thead>
+          <tbody id="delivery-tbody"></tbody>
+        </table>
+      </div>
+      <button class="add-location-btn" onclick="addDeliveryZone()"><i class="fas fa-plus"></i> Add Location</button>
+      <div style="margin-top:1.5rem">
+        <button class="save-btn" onclick="saveDelivery()">Save Delivery Zones</button>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="admin-section" id="tab-orders">
+      <h3 class="form-section-title" style="margin-top:0">All Orders</h3>
+      <div class="orders-list" id="orders-list">
+        <p style="color:var(--muted);font-size:14px">No orders yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

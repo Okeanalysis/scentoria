@@ -32,12 +32,31 @@ function loadData(key, fallback) {
 
 function loadAll() {
   products = loadData('scentoria_products', []);
-  delivery = loadData('scentoria_delivery', DEFAULT_DELIVERY);
-  if (!delivery.length) delivery = [...DEFAULT_DELIVERY];
+  const storedDelivery = loadData('scentoria_delivery', null);
+  delivery = storedDelivery !== null ? storedDelivery : [...DEFAULT_DELIVERY];
   orders   = loadData('scentoria_orders', []);
   cart     = loadData('scentoria_cart', []);
   updateCartCount();
   renderShop();
+}
+
+function resetAdminPortal() {
+  products = [];
+  delivery = [];
+  orders = [];
+  cart = [];
+  pendingImage = null;
+
+  saveData('scentoria_products', products);
+  saveData('scentoria_delivery', delivery);
+  saveData('scentoria_orders', orders);
+  saveData('scentoria_cart', cart);
+
+  updateCartCount();
+  renderShop();
+  renderAdmin();
+  resetAdminPage();
+  showToast('Admin portal reset to zero.');
 }
 
 // ── NAVIGATION ──
